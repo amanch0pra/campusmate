@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Campus Mate — Your LPU AI-Powered Student Assistant for academics, admissions, campus life, placements, and more.">
+    <title>Campus Mate | LPU Intelligence Hub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@300;400;500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+    <!-- Animated Background Canvas -->
+    <canvas id="particleCanvas"></canvas>
+
+    <!-- Ambient Glow Orbs -->
+    <div class="ambient-orb orb-1"></div>
+    <div class="ambient-orb orb-2"></div>
+    <div class="ambient-orb orb-3"></div>
+
+    <main class="main-chat" id="mainChat">
+        <!-- Elite Scan Line -->
+
+
+        <!-- ===== HEADER ===== -->
+        <header class="ums-header">
+            <div class="header-logo">
+                <div class="lpu-icon" id="logoIcon">
+                    <img src="{{ url_for('static', filename='lpu_logo.png') }}" alt="LPU"
+                        onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-microchip\'></i>'">
+                </div>
+                <div class="header-title">
+                    <h1>CAMPUS MATE</h1>
+                </div>
+            </div>
+
+
+            <div class="header-right">
+                <div class="mode-selector">
+                    <div class="mode-label"><i class="fas fa-sliders-h"></i> MODE</div>
+                    <select id="modeSelect" onchange="changeMode()">
+                        <option value="auto">✧ Auto-Detect</option>
+                        <option value="Academic">📚 Academic</option>
+                        <option value="Admissions and Administration">📝 Admissions</option>
+                        <option value="Campus Life">🏕️ Campus Life</option>
+                        <option value="Placements and Career">💼 Placements</option>
+                        <option value="Rules Safety and Grievance">⚖️ Rules & Safety</option>
+                    </select>
+                </div>
+                <button class="clear-btn" onclick="clearChat()" id="clearChatBtn" title="Clear Chat">
+                    <i class="fas fa-trash-alt"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- ===== QUICK ACTION DASHBOARD ===== -->
+        <div class="action-dash">
+            <div class="dash-track">
+                <button class="action-card" id="card-rms" onclick="setQuery('How to use RMS portal for requests?')">
+                    <div class="card-icon">🎫</div>
+                    <div class="card-info">
+                        <span class="card-title">RMS Portal</span>
+                        <span class="card-desc">Requests & DL</span>
+                    </div>
+                </button>
+                <button class="action-card" id="card-fee" onclick="setQuery('What is the BTech fee structure at LPU?')">
+                    <div class="card-icon">💳</div>
+                    <div class="card-info">
+                        <span class="card-title">Fee Structure</span>
+                        <span class="card-desc">Academic Dues</span>
+                    </div>
+                </button>
+                <button class="action-card" id="card-cgpa" onclick="setQuery('How is CGPA calculated at LPU?')">
+                    <div class="card-icon">🎯</div>
+                    <div class="card-info">
+                        <span class="card-title">CGPA System</span>
+                        <span class="card-desc">Grading & Marks</span>
+                    </div>
+                </button>
+                <button class="action-card" id="card-place"
+                    onclick="setQuery('What are the top placement companies at LPU?')">
+                    <div class="card-icon">🚀</div>
+                    <div class="card-info">
+                        <span class="card-title">Placements</span>
+                        <span class="card-desc">Top Recruiters</span>
+                    </div>
+                </button>
+            </div>
+        </div>
+
+        <!-- ===== CHAT AREA ===== -->
+        <div class="chat-area" id="chatContainer">
+            <!-- Welcome Message -->
+            <div class="message-row bot" id="welcomeMsg">
+                <div class="message-content">
+                    <div class="avatar bot-avatar pulse-avatar">V</div>
+                    <div class="text-block">
+                        <div class="text-main welcome-text">
+                            <span class="greeting-emoji">👋</span>
+                            <strong>Welcome, LPU Student!</strong><br><br>
+                            I am <strong>Campus Mate</strong> — your dedicated AI intelligence system for
+                            <span class="highlight-chip">Lovely Professional University</span>.<br><br>
+                            I can answer anything about <strong>academics, admissions, hostel, placements, rules,
+                                fees</strong> and every LPU system — powered by a real LPU knowledge base + Groq AI.
+                            <br><br>
+                            <em>Try the quick actions above or ask me anything! ⚡</em>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Suggested Questions -->
+            <div class="suggested-questions" id="suggestedQuestions">
+                <h3><i class="fas fa-bolt"></i>&nbsp;POPULAR QUERIES</h3>
+                <div class="question-chips" id="questionChips">
+                    <div class="question-chip" onclick="askQuestion('What is the fee structure for BTech at LPU?')">🎓
+                        BTech Fee Structure</div>
+                    <div class="question-chip" onclick="askQuestion('How to check attendance on UMS portal?')">📋 Check
+                        UMS Attendance</div>
+                    <div class="question-chip" onclick="askQuestion('What hostel facilities are available for boys?')">
+                        🏠 Hostel Facilities</div>
+                    <div class="question-chip" onclick="askQuestion('Which top companies visit LPU for placements?')">💼
+                        Top Placement Companies</div>
+                    <div class="question-chip" onclick="askQuestion('How to apply for duty leave at LPU?')">📅 Duty
+                        Leave Process</div>
+                    <div class="question-chip" onclick="askQuestion('How does the LPUNEST scholarship work?')">🏆
+                        LPUNEST Scholarship</div>
+                    <div class="question-chip" onclick="askQuestion('What is the attendance rule at LPU?')">⚠️
+                        Attendance Rules</div>
+                    <div class="question-chip" onclick="askQuestion('What societies and clubs are at LPU?')">🎭 Clubs &
+                        Societies</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== INPUT AREA ===== -->
+        <div class="input-wrapper">
+            <div class="input-container" id="inputContainer">
+                <div class="input-prefix">
+                    <i class="fas fa-terminal"></i>
+                </div>
+                <textarea id="user-input" placeholder="Ask anything about LPU..." rows="1"></textarea>
+                <button id="send-btn" onclick="sendMessage()" title="Send">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+            <div class="input-footer">
+                <span class="disclaimer">
+                    <i class="fas fa-shield-alt"></i>&nbsp;Campus Mate uses LPU-specific data. Cross-reference
+                    critical info via UMS.
+                </span>
+                <span class="app-footer">&copy; 2026 CAMPUS MATE &bull; 12406294 Aman Chopra</span>
+            </div>
+        </div>
+    </main>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+
+</html>

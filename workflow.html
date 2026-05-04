@@ -1,0 +1,31 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <style>body { background: white; margin: 20px; font-family: sans-serif; }</style>
+</head>
+<body>
+    <div class="mermaid">
+        flowchart TD
+            A([User Submits Query]) --> B[Acronym Expansion]
+            B --> C{Mode Selected?}
+            C -- Yes --> D[Filter Dataset by Category]
+            C -- No --> E[Use Full Dataset]
+            D --> F
+            E --> F[Generate Query Embedding]
+            F -->|MiniLM-L6-v2| G[Calculate Cosine Similarity]
+            G --> H[Retrieve Top 10 Context Matches]
+            H --> I{Contains Critical Keywords?}
+            I -- Yes --> J[Boost Keyword-Specific Rows]
+            I -- No --> K[Evaluate Match Confidence]
+            J --> K
+            K --> L{Similarity < 0.25?}
+            L -- Yes --> M([Return Out-of-Scope Fallback])
+            L -- No --> N[Construct RAG Prompt]
+            N --> O[Query Groq LLaMA-3.3 70B]
+            O -->|Success| P([Return AI Response])
+            O -->|API Failure| Q([Fallback to Dataset Answer])
+    </div>
+    <script>mermaid.initialize({startOnLoad:true, theme: 'default'});</script>
+</body>
+</html>

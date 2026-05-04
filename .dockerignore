@@ -1,0 +1,40 @@
+# Git
+.git
+.gitignore
+
+# Python
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv
+pip-log.txt
+pip-delete-this-directory.txt
+.history
+
+# Local environment
+.env
+.env.local
+.env.production
+.env.test
+
+# Jupyter
+.ipynb_checkpoints
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Deployment artifacts
+Dockerfile
+.dockerignore
+implementation_plan.md
+task.md
+walkthrough.md
+
+# Local local data (if any)
+*.backup
+*.bak
